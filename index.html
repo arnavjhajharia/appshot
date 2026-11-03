@@ -162,7 +162,7 @@
   <div class="stage">
     <canvas id="preview"></canvas>
     <div class="sizebar" id="sizebar"></div>
-    <div class="hint">Tip: make one screenshot per store size, or hit “Download all sizes” to export every size in this list at once (incl. Apple's required iPhone 1179×2556 and iPad 13" 2064×2752).</div>
+    <div class="hint">Tip: make one screenshot per store size, or hit “Download all sizes” to export every current size in this list at once (incl. Apple's required iPhone 1179×2556 and iPad 13" 2064×2752). The 2027 iPhone Duo sizes are added only when one is selected.</div>
   </div>
 
   <footer>
@@ -196,6 +196,8 @@
     {id:"ipad", label:'iPad 12.9" — 2048 × 2732', w:2048, h:2732, store:"App Store"},
     {id:"and",  label:'Android phone — 1080 × 1920', w:1080, h:1920, store:"Google Play"},
     {id:"andx", label:'Android tall — 1080 × 2400', w:1080, h:2400, store:"Google Play"},
+    {id:"duoout", label:'iPhone Duo outer (from Apr 2027) — 1398 × 2034', w:1398, h:2034, store:"App Store", future:true, note:"Required from April 2027 for apps built with the iOS 27.1 SDK. Use a screenshot taken on the Duo outer display (or its simulator)."},
+    {id:"duoin", label:'iPhone Duo inner (from Apr 2027) — 2007 × 2853', w:2007, h:2853, store:"App Store", future:true, note:"Required from April 2027 for apps built with the iOS 27.1 SDK. The inner display is much wider than an iPhone, so capture your app's wide layout on the Duo simulator."},
   ];
   const FRAMES = [
     {id:"iphone", label:"iPhone"},
@@ -227,7 +229,7 @@
   GRADS.forEach((g,i)=>{const d=document.createElement("div");d.className="sw"+(i===0?" on":"");d.style.background=`linear-gradient(135deg,${g[0]},${g[1]})`;d.dataset.i=i;gradPick.appendChild(d);});
   gradPick.addEventListener("click",e=>{const sw=e.target.closest(".sw");if(!sw)return;const g=GRADS[+sw.dataset.i];$("#bgA").value=g[0];$("#bgB").value=g[1];[...gradPick.children].forEach(x=>x.classList.toggle("on",x===sw));draw();});
 
-  function syncSizeHint(){const s=SIZES.find(x=>x.id===state.sizeId);$("#sizeHint").textContent=s.store+" · "+s.w+"×"+s.h+"px";}
+  function syncSizeHint(){const s=SIZES.find(x=>x.id===state.sizeId);$("#sizeHint").textContent=s.store+" · "+s.w+"×"+s.h+"px"+(s.note?" · "+s.note:"");}
   sizeSel.value=state.sizeId; syncSizeHint();
   sizeSel.addEventListener("change",()=>{state.sizeId=sizeSel.value;syncSizeHint();draw();});
 
@@ -435,7 +437,7 @@
   $("#dlAll").addEventListener("click",async()=>{
     if(!state.img){alert("Add a screenshot first.");return;}
     const zip=new JSZip();
-    for(const s of SIZES){
+    for(const s of SIZES.filter(x=>!x.future||x.id===state.sizeId)){
       const blob=await new Promise(res=>exportSize(s).toBlob(res,"image/png"));
       zip.file(`appshot-${s.id}-${s.w}x${s.h}.png`,blob);
     }
