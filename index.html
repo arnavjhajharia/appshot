@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AppShot — App Store & Play Store screenshot maker (free, in-browser)</title>
+<meta name="description" content="Turn a raw screenshot into polished App Store & Google Play listing graphics. Device frames, captions, gradient backgrounds. 100% in your browser — nothing uploaded. Free.">
+<style>
+  :root{
+    --bg:#0e0f13; --panel:#16181f; --panel2:#1d2029; --line:#2a2e3a;
+    --ink:#eef1f7; --muted:#9aa3b2; --accent:#6c8cff; --accent2:#b06cff; --ok:#39d98a;
+    --radius:12px; --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:14px;line-height:1.45}
+  a{color:var(--accent)}
+  header{padding:14px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  header h1{font-size:17px;margin:0;font-weight:650;letter-spacing:-.2px}
+  header .tag{font-size:11px;color:var(--muted);border:1px solid var(--line);padding:2px 8px;border-radius:99px}
+  header .spacer{flex:1}
+  header .priv{font-size:12px;color:var(--ok)}
+  .wrap{display:grid;grid-template-columns:340px 1fr;gap:0;height:calc(100vh - 53px)}
+  @media(max-width:860px){.wrap{grid-template-columns:1fr;height:auto}}
+  .panel{background:var(--panel);border-right:1px solid var(--line);overflow-y:auto;padding:16px}
+  .stage{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:24px;overflow:auto;gap:16px}
+  .group{margin-bottom:18px}
+  .group>label.h{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px;font-weight:600}
+  .row{display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap}
+  input[type=text],textarea,select{width:100%;background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:9px 10px;font-family:var(--font);font-size:13px}
+  textarea{resize:vertical;min-height:52px}
+  input[type=range]{width:100%}
+  input[type=color]{width:38px;height:30px;border:1px solid var(--line);background:none;border-radius:6px;padding:2px}
+  .seg{display:flex;flex-wrap:wrap;gap:6px}
+  .seg button{flex:1 1 auto;background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:7px 9px;cursor:pointer;font-size:12px}
+  .seg button.on{border-color:var(--accent);background:#20264a;color:#fff}
+  .drop{border:1.5px dashed var(--line);border-radius:10px;padding:18px;text-align:center;color:var(--muted);cursor:pointer;transition:.15s}
+  .drop.hot{border-color:var(--accent);background:#171b2e;color:var(--ink)}
+  .btn{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:0;border-radius:9px;padding:11px 14px;font-weight:650;cursor:pointer;font-size:13px;width:100%}
+  .btn.sec{background:var(--panel2);border:1px solid var(--line);color:var(--ink);font-weight:500}
+  .gradpick{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+  .gradpick .sw{height:30px;border-radius:7px;border:2px solid transparent;cursor:pointer}
+  .gradpick .sw.on{border-color:#fff}
+  canvas#preview{max-width:100%;max-height:72vh;border-radius:18px;box-shadow:0 18px 50px rgba(0,0,0,.5);background:#000}
+  .hint{font-size:11px;color:var(--muted);margin-top:4px}
+  .sizebar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+  .sizebar .chip{font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:4px 9px}
+  .val{font-size:11px;color:var(--muted);min-width:34px;text-align:right}
+  footer{grid-column:1/-1;border-top:1px solid var(--line);padding:10px 20px;font-size:12px;color:var(--muted);text-align:center}
+  .pro{margin-top:10px;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--panel2);font-size:12px;color:var(--muted)}
+  .pro b{color:var(--ink)}
+</style>
+</head>
+<body>
+<header>
+  <h1>AppShot</h1>
+  <span class="tag">App Store &amp; Play Store screenshots</span>
+  <span class="spacer"></span>
+  <span class="priv">🔒 100% in-browser · nothing uploaded</span>
+</header>
+
+<div class="wrap">
+  <div class="panel">
+    <div class="group">
+      <label class="h">1 · Screenshot</label>
+      <div class="drop" id="drop">Drop a screenshot here<br><span class="hint">or click to choose · PNG / JPG</span></div>
+      <input type="file" id="file" accept="image/*" style="display:none">
+    </div>
+
+    <div class="group">
+      <label class="h">2 · Store size</label>
+      <select id="sizeSel"></select>
+      <div class="hint" id="sizeHint"></div>
+    </div>
+
+    <div class="group">
+      <label class="h">3 · Device frame</label>
+      <div class="seg" id="frameSeg"></div>
+    </div>
+
+    <div class="group">
+      <label class="h">4 · Caption</label>
+      <textarea id="capText" placeholder="Headline — e.g. Track every habit in seconds"></textarea>
+      <div class="row">
+        <select id="capPos" style="flex:2">
+          <option value="top">Caption on top</option>
+          <option value="bottom">Caption on bottom</option>
+          <option value="none">No caption</option>
+        </select>
+        <input type="color" id="capColor" value="#ffffff" title="Caption color">
+      </div>
+      <div class="row"><span class="val">Size</span><input type="range" id="capSize" min="3" max="9" step="0.25" value="5.2"></div>
+      <div class="row">
+        <select id="capFont" style="flex:1">
+          <option value="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif">System / Sans</option>
+          <option value="Georgia,'Times New Roman',serif">Serif</option>
+          <option value="'Trebuchet MS',Verdana,sans-serif">Rounded</option>
+          <option value="'Courier New',monospace">Mono</option>
+        </select>
+        <select id="capWeight" style="flex:1">
+          <option value="800">Bold</option>
+          <option value="600">Semibold</option>
+          <option value="400">Regular</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="group">
+      <label class="h">5 · Background</label>
+      <div class="gradpick" id="gradPick"></div>
+      <div class="row" style="margin-top:8px">
+        <span class="val">Custom</span>
+        <input type="color" id="bgA" value="#6c8cff">
+        <input type="color" id="bgB" value="#b06cff">
+        <span class="val">Angle</span>
+        <input type="range" id="bgAngle" min="0" max="360" value="135" style="flex:1">
+      </div>
+    </div>
+
+    <div class="group">
+      <label class="h">6 · Layout</label>
+      <div class="row"><span class="val">Zoom</span><input type="range" id="devScale" min="0.5" max="1.15" step="0.01" value="0.82"></div>
+      <div class="row"><span class="val">Shift</span><input type="range" id="devShift" min="-0.25" max="0.25" step="0.01" value="0"></div>
+      <div class="row">
+        <label style="font-size:12px;color:var(--muted)"><input type="checkbox" id="devShadow" checked> device shadow</label>
+      </div>
+    </div>
+
+    <div class="group">
+      <button class="btn" id="dlOne">⬇ Download this size (PNG)</button>
+      <button class="btn sec" id="dlAll" style="margin-top:8px">⬇ Download all sizes (.zip)</button>
+      <div class="pro">
+        <b>Need a set that looks designed?</b> A Pro template pack (30+ layouts, fonts &amp; backgrounds) is coming.
+        This free tool makes clean store-ready frames with zero upload and zero cost.
+      </div>
+    </div>
+  </div>
+
+  <div class="stage">
+    <canvas id="preview"></canvas>
+    <div class="sizebar" id="sizebar"></div>
+    <div class="hint">Tip: make one screenshot per store size, or hit “Download all sizes” to export every required dimension at once.</div>
+  </div>
+
+  <footer>
+    AppShot · free, open, private App Store &amp; Google Play screenshot maker. Your image never leaves this page.
+  </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+"use strict";
+(function(){
+  // ---- Store sizes (px) ----
+  const SIZES = [
+    {id:"ip67", label:'iPhone 6.7" — 1290 × 2796', w:1290, h:2796, store:"App Store"},
+    {id:"ip65", label:'iPhone 6.5" — 1242 × 2688', w:1242, h:2688, store:"App Store"},
+    {id:"ipad", label:'iPad 12.9" — 2048 × 2732', w:2048, h:2732, store:"App Store"},
+    {id:"and",  label:'Android phone — 1080 × 1920', w:1080, h:1920, store:"Google Play"},
+    {id:"andx", label:'Android tall — 1080 × 2400', w:1080, h:2400, store:"Google Play"},
+  ];
+  const FRAMES = [
+    {id:"iphone", label:"iPhone"},
+    {id:"android", label:"Android"},
+    {id:"ipadf", label:"iPad"},
+    {id:"none", label:"No frame"},
+  ];
+  const GRADS = [
+    ["#6c8cff","#b06cff"], ["#ff6b6b","#ffa26b"], ["#13c2c2","#36cfc9"],
+    ["#f093fb","#f5576c"], ["#4facfe","#00f2fe"], ["#43e97b","#38f9d7"],
+    ["#fa709a","#fee140"], ["#30cfd0","#330867"], ["#1f2b4d","#0e0f13"],
+    ["#ff9a9e","#fad0c4"], ["#a1c4fd","#c2e9fb"], ["#2b5876","#4e4376"],
+  ];
+
+  const $ = s=>document.querySelector(s);
+  const state = {
+    img:null,
+    sizeId:"ip67",
+    frame:"iphone",
+  };
+
+  // ---- build UI ----
+  const sizeSel = $("#sizeSel");
+  SIZES.forEach(s=>{const o=document.createElement("option");o.value=s.id;o.textContent=s.label;sizeSel.appendChild(o);});
+  const frameSeg = $("#frameSeg");
+  FRAMES.forEach(f=>{const b=document.createElement("button");b.textContent=f.label;b.dataset.id=f.id;if(f.id===state.frame)b.classList.add("on");frameSeg.appendChild(b);});
+  frameSeg.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;state.frame=b.dataset.id;[...frameSeg.children].forEach(x=>x.classList.toggle("on",x===b));draw();});
+  const gradPick = $("#gradPick");
+  GRADS.forEach((g,i)=>{const d=document.createElement("div");d.className="sw"+(i===0?" on":"");d.style.background=`linear-gradient(135deg,${g[0]},${g[1]})`;d.dataset.i=i;gradPick.appendChild(d);});
+  gradPick.addEventListener("click",e=>{const sw=e.target.closest(".sw");if(!sw)return;const g=GRADS[+sw.dataset.i];$("#bgA").value=g[0];$("#bgB").value=g[1];[...gradPick.children].forEach(x=>x.classList.toggle("on",x===sw));draw();});
+
+  function syncSizeHint(){const s=SIZES.find(x=>x.id===state.sizeId);$("#sizeHint").textContent=s.store+" · "+s.w+"×"+s.h+"px";}
+  sizeSel.value=state.sizeId; syncSizeHint();
+  sizeSel.addEventListener("change",()=>{state.sizeId=sizeSel.value;syncSizeHint();draw();});
+
+  // size chips
+  const sizebar=$("#sizebar");
+  SIZES.forEach(s=>{const c=document.createElement("span");c.className="chip";c.textContent=s.label.split(" — ")[0];sizebar.appendChild(c);});
+
+  // ---- file handling ----
+  const drop=$("#drop"), file=$("#file");
+  drop.addEventListener("click",()=>file.click());
+  file.addEventListener("change",e=>{if(e.target.files[0])loadImg(e.target.files[0]);});
+  ["dragenter","dragover"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add("hot");}));
+  ["dragleave","drop"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove("hot");}));
+  drop.addEventListener("drop",e=>{const f=e.dataTransfer.files[0];if(f)loadImg(f);});
+  function loadImg(f){
+    const r=new FileReader();
+    r.onload=()=>{const im=new Image();im.onload=()=>{state.img=im;drop.innerHTML="✓ "+f.name+"<br><span class='hint'>click to replace</span>";draw();};im.src=r.result;};
+    r.readAsDataURL(f);
+  }
+
+  // live inputs
+  ["capText","capPos","capColor","capSize","capFont","capWeight","bgA","bgB","bgAngle","devScale","devShift","devShadow"]
+    .forEach(id=>{const el=$("#"+id);el.addEventListener("input",draw);el.addEventListener("change",draw);});
+
+  function roundRect(ctx,x,y,w,h,r){
+    r=Math.min(r,w/2,h/2);
+    ctx.beginPath();
+    ctx.moveTo(x+r,y);
+    ctx.arcTo(x+w,y,x+w,y+h,r);
+    ctx.arcTo(x+w,y+h,x,y+h,r);
+    ctx.arcTo(x,y+h,x,y,r);
+    ctx.arcTo(x,y,x+w,y,r);
+    ctx.closePath();
+  }
+
+  // ---- core render: works at any resolution (preview & export share it) ----
+  function render(ctx,W,H){
+    // background gradient
+    const ang=(+$("#bgAngle").value)*Math.PI/180;
+    const cx=W/2, cy=H/2, len=Math.max(W,H);
+    const gx=Math.cos(ang)*len/2, gy=Math.sin(ang)*len/2;
+    const g=ctx.createLinearGradient(cx-gx,cy-gy,cx+gx,cy+gy);
+    g.addColorStop(0,$("#bgA").value); g.addColorStop(1,$("#bgB").value);
+    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+
+    const pad=W*0.08;
+    const capMode=$("#capPos").value;
+    const capText=$("#capText").value.trim();
+    const hasCap = capMode!=="none" && capText.length>0;
+    const capBandH = hasCap ? H*0.16 : H*0.05;
+
+    // compute device region (vertical band left for device)
+    let topBand = (hasCap && capMode==="top") ? capBandH : H*0.05;
+    let botBand = (hasCap && capMode==="bottom") ? capBandH : H*0.05;
+    const regionY = topBand;
+    const regionH = H - topBand - botBand;
+
+    // draw caption
+    if(hasCap){
+      ctx.save();
+      ctx.fillStyle=$("#capColor").value;
+      ctx.textAlign="center"; ctx.textBaseline="middle";
+      const fs = H*(+$("#capSize").value)/100;
+      ctx.font=`${$("#capWeight").value} ${fs}px ${$("#capFont").value}`;
+      const lines=wrapText(ctx,capText,W-pad*2);
+      const lineH=fs*1.15;
+      const blockH=lines.length*lineH;
+      let by = capMode==="top" ? (topBand/2) : (H - botBand/2);
+      let startY = by - blockH/2 + lineH/2;
+      lines.forEach((ln,i)=>ctx.fillText(ln,W/2,startY+i*lineH));
+      ctx.restore();
+    }
+
+    if(!state.img){
+      ctx.fillStyle="rgba(255,255,255,.75)";
+      ctx.textAlign="center"; ctx.font=`600 ${W*0.04}px ${state.img?'sans-serif':'-apple-system,sans-serif'}`;
+      ctx.fillText("Drop a screenshot →", W/2, regionY+regionH/2);
+      return;
+    }
+
+    // ---- device drawing ----
+    const zoom=+$("#devScale").value;
+    const shift=+$("#devShift").value;
+    const frame=state.frame;
+    const img=state.img;
+
+    // target screen aspect based on store size is tall; fit the device into region
+    let availH = regionH*zoom;
+    let availW = (W-pad*0.6)*zoom;
+
+    if(frame==="none"){
+      // just place screenshot with rounded corners + shadow
+      let iw=img.width, ih=img.height;
+      let sc=Math.min(availW/iw, availH/ih);
+      let dw=iw*sc, dh=ih*sc;
+      let dx=(W-dw)/2 + shift*W, dy=regionY+(regionH-dh)/2;
+      ctx.save();
+      if($("#devShadow").checked){ctx.shadowColor="rgba(0,0,0,.35)";ctx.shadowBlur=W*0.04;ctx.shadowOffsetY=H*0.012;}
+      roundRect(ctx,dx,dy,dw,dh,dw*0.05); ctx.fillStyle="#000"; ctx.fill();
+      ctx.restore();
+      ctx.save(); roundRect(ctx,dx,dy,dw,dh,dw*0.05); ctx.clip();
+      ctx.drawImage(img,dx,dy,dw,dh); ctx.restore();
+      return;
+    }
+
+    // framed devices: define bezel thickness + corner radius + screen aspect
+    let conf;
+    if(frame==="iphone") conf={bezel:0.028, corner:0.11, screenAspect:19.5/9, island:true};
+    else if(frame==="android") conf={bezel:0.022, corner:0.09, screenAspect:20/9, island:false, hole:true};
+    else conf={bezel:0.030, corner:0.055, screenAspect:4/3, island:false}; // ipad
+
+    // device outer size: fit by height primarily
+    // outer width = screenW + 2*bezelW ; screen aspect = h/w
+    // choose screen height to fill availH minus bezels
+    let outerH = availH;
+    let screenH = outerH*(1-2*conf.bezel);
+    let screenW = screenH/conf.screenAspect;
+    let outerW = screenW/(1-2*conf.bezel);
+    if(outerW>availW){ outerW=availW; screenW=outerW*(1-2*conf.bezel); screenH=screenW*conf.screenAspect; outerH=screenH/(1-2*conf.bezel); }
+
+    let ox=(W-outerW)/2 + shift*W;
+    let oy=regionY+(regionH-outerH)/2;
+    let bz=outerW*conf.bezel;
+    let sx=ox+bz, sy=oy+bz, sw=outerW-2*bz, sh=outerH-2*bz;
+    let rout=outerW*conf.corner, rin=Math.max(0,rout-bz);
+
+    ctx.save();
+    if($("#devShadow").checked){ctx.shadowColor="rgba(0,0,0,.4)";ctx.shadowBlur=outerW*0.07;ctx.shadowOffsetY=outerH*0.02;}
+    // body
+    roundRect(ctx,ox,oy,outerW,outerH,rout);
+    const body=ctx.createLinearGradient(ox,oy,ox+outerW,oy+outerH);
+    body.addColorStop(0,"#2b2d33"); body.addColorStop(.5,"#0c0d10"); body.addColorStop(1,"#26282e");
+    ctx.fillStyle=body; ctx.fill();
+    ctx.restore();
+
+    // screen fill black
+    roundRect(ctx,sx,sy,sw,sh,rin); ctx.save(); ctx.fillStyle="#000"; ctx.fill(); ctx.restore();
+
+    // screenshot clipped into screen (cover-fit)
+    ctx.save(); roundRect(ctx,sx,sy,sw,sh,rin); ctx.clip();
+    let iw=img.width, ih=img.height, sc=Math.max(sw/iw, sh/ih);
+    let dw=iw*sc, dh=ih*sc, dx=sx+(sw-dw)/2, dy=sy+(sh-dh)/2;
+    ctx.drawImage(img,dx,dy,dw,dh);
+    ctx.restore();
+
+    // notch / island / hole punch
+    ctx.save(); ctx.fillStyle="#000";
+    if(conf.island){
+      let iwid=sw*0.34, ihei=sh*0.016, ix=sx+(sw-iwid)/2, iy=sy+sh*0.018;
+      roundRect(ctx,ix,iy,iwid,ihei,ihei/2); ctx.fill();
+    } else if(conf.hole){
+      let r=sw*0.016; ctx.beginPath(); ctx.arc(sx+sw/2, sy+sh*0.028, r, 0, 7); ctx.fill();
+    }
+    ctx.restore();
+    // side button hint (iphone/android)
+    if(frame!=="ipadf"){
+      ctx.save(); ctx.fillStyle="rgba(255,255,255,.08)";
+      ctx.fillRect(ox-bz*0.2, oy+outerH*0.22, bz*0.25, outerH*0.08);
+      ctx.restore();
+    }
+  }
+
+  function wrapText(ctx,text,maxW){
+    const words=text.split(/\s+/); const lines=[]; let cur="";
+    words.forEach(w=>{const t=cur?cur+" "+w:w; if(ctx.measureText(t).width>maxW && cur){lines.push(cur);cur=w;}else cur=t;});
+    if(cur)lines.push(cur);
+    return lines.slice(0,4);
+  }
+
+  const preview=$("#preview"), pctx=preview.getContext("2d");
+  function draw(){
+    const s=SIZES.find(x=>x.id===state.sizeId);
+    preview.width=s.w; preview.height=s.h;
+    render(pctx,s.w,s.h);
+  }
+
+  function exportSize(s){
+    const c=document.createElement("canvas"); c.width=s.w; c.height=s.h;
+    render(c.getContext("2d"),s.w,s.h);
+    return c;
+  }
+  $("#dlOne").addEventListener("click",()=>{
+    if(!state.img){alert("Add a screenshot first.");return;}
+    const s=SIZES.find(x=>x.id===state.sizeId);
+    exportSize(s).toBlob(b=>{const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=`appshot-${s.id}-${s.w}x${s.h}.png`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4000);},"image/png");
+  });
+  $("#dlAll").addEventListener("click",async()=>{
+    if(!state.img){alert("Add a screenshot first.");return;}
+    const zip=new JSZip();
+    for(const s of SIZES){
+      const blob=await new Promise(res=>exportSize(s).toBlob(res,"image/png"));
+      zip.file(`appshot-${s.id}-${s.w}x${s.h}.png`,blob);
+    }
+    const out=await zip.generateAsync({type:"blob"});
+    const a=document.createElement("a");a.href=URL.createObjectURL(out);a.download="appshot-all-sizes.zip";a.click();
+    setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+  });
+
+  // prefill a nice default caption so the empty state looks designed
+  $("#capText").value="Your app, beautifully presented";
+  draw();
+})();
+</script>
+</body>
+</html>
