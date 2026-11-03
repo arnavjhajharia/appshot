@@ -33,3 +33,5 @@ One-line: **Free in-browser App Store & Google Play screenshot maker — exact r
 ## Guide
 
 [App Store & Google Play screenshot sizes (November 2026)](https://arnavjhajharia.github.io/appshot/screenshot-sizes/): every device size, which ones are required, and a simple export recipe.
+
+**Also on DEV:** [App Store screenshot sizes in 2026](https://dev.to/bharat_ankh_920bf0864220a/app-store-screenshot-sizes-in-2026-which-ones-are-actually-required-24f5) (links back to the guide).
