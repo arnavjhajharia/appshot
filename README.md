@@ -30,6 +30,14 @@ Single `index.html`, no build step. MIT licensed.
 
 One-line: **Free in-browser App Store & Google Play screenshot maker — exact required pixel sizes, device frames, no upload.** https://arnavjhajharia.github.io/appshot/ · https://github.com/arnavjhajharia/appshot
 
+## Ship Kit (free tools)
+| Tool | URL |
+|------|-----|
+| [AppShot](https://arnavjhajharia.github.io/appshot/) | Store screenshots (this repo) |
+| [Favikit](https://arnavjhajharia.github.io/favikit/) | Favicons |
+| [ogkit](https://arnavjhajharia.github.io/ogkit/) | OG / social cards |
+| [ShipCopy](https://arnavjhajharia.github.io/shipcopy/) | Changelog → launch copy |
+
 ## Guide
 
 [App Store & Google Play screenshot sizes (November 2026)](https://arnavjhajharia.github.io/appshot/screenshot-sizes/): every device size, which ones are required, and a simple export recipe.
