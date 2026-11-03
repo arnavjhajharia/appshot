@@ -25,3 +25,7 @@ Free tool = funnel. A paid **Pro template pack** (30+ designed layouts, fonts, b
 revenue SKU, sold as a Gumroad download. App-icon / favicon export folds in (see sibling tool Favikit).
 
 Single `index.html`, no build step. MIT licensed.
+
+## Guide
+
+[App Store & Google Play screenshot sizes (November 2026)](https://arnavjhajharia.github.io/appshot/screenshot-sizes/): every device size, which ones are required, and a simple export recipe.
