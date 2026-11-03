@@ -424,6 +424,28 @@
     render(pctx,s.w,s.h);
   }
 
+
+  // ---- 24-bit RGB PNG (no alpha channel) ----
+  // Browsers always encode canvas PNGs as RGBA, and App Store Connect rejects screenshots that contain an alpha
+  // channel even when every pixel is opaque. Google Play also asks for 24-bit PNG. So we write the PNG ourselves.
+  const CRC_T=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xedb88320^(c>>>1):c>>>1;t[n]=c>>>0;}return t;})();
+  function crc32(buf){let c=0xffffffff;for(let i=0;i<buf.length;i++)c=CRC_T[(c^buf[i])&255]^(c>>>8);return (c^0xffffffff)>>>0;}
+  function pngChunk(type,data){const out=new Uint8Array(12+data.length),dv=new DataView(out.buffer);dv.setUint32(0,data.length);
+    for(let i=0;i<4;i++)out[4+i]=type.charCodeAt(i);out.set(data,8);dv.setUint32(8+data.length,crc32(out.subarray(4,8+data.length)));return out;}
+  async function rgbPngBlob(canvas){
+    if(typeof CompressionStream==="undefined") return new Promise(res=>canvas.toBlob(res,"image/png")); // very old browsers: RGBA fallback
+    const w=canvas.width,h=canvas.height,px=canvas.getContext("2d").getImageData(0,0,w,h).data;
+    const stride=w*3+1,raw=new Uint8Array(stride*h);
+    for(let y=0;y<h;y++){ // filter 1 (Sub) per row: smaller files for gradients
+      const o=y*stride; raw[o]=1; let p=y*w*4, pr=0,pg=0,pb=0;
+      for(let x=0;x<w;x++,p+=4){const r=px[p],g=px[p+1],b=px[p+2],q=o+1+x*3;raw[q]=(r-pr)&255;raw[q+1]=(g-pg)&255;raw[q+2]=(b-pb)&255;pr=r;pg=g;pb=b;}
+    }
+    const z=new Uint8Array(await new Response(new Blob([raw]).stream().pipeThrough(new CompressionStream("deflate"))).arrayBuffer());
+    const ihdr=new Uint8Array(13),dv=new DataView(ihdr.buffer);dv.setUint32(0,w);dv.setUint32(4,h);ihdr[8]=8;ihdr[9]=2;ihdr[10]=0;ihdr[11]=0;ihdr[12]=0;
+    const sig=new Uint8Array([137,80,78,71,13,10,26,10]);
+    return new Blob([sig,pngChunk("IHDR",ihdr),pngChunk("IDAT",z),pngChunk("IEND",new Uint8Array(0))],{type:"image/png"});
+  }
+  window.appshotRgbPng=rgbPngBlob;
   function exportSize(s){
     const c=document.createElement("canvas"); c.width=s.w; c.height=s.h;
     render(c.getContext("2d"),s.w,s.h);
@@ -432,13 +454,13 @@
   $("#dlOne").addEventListener("click",()=>{
     if(!state.img){alert("Add a screenshot first.");return;}
     const s=SIZES.find(x=>x.id===state.sizeId);
-    exportSize(s).toBlob(b=>{const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=`appshot-${s.id}-${s.w}x${s.h}.png`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4000);},"image/png");
+    rgbPngBlob(exportSize(s)).then(b=>{const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=`appshot-${s.id}-${s.w}x${s.h}.png`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4000);});
   });
   $("#dlAll").addEventListener("click",async()=>{
     if(!state.img){alert("Add a screenshot first.");return;}
     const zip=new JSZip();
     for(const s of SIZES.filter(x=>!x.future||x.id===state.sizeId)){
-      const blob=await new Promise(res=>exportSize(s).toBlob(res,"image/png"));
+      const blob=await rgbPngBlob(exportSize(s));
       zip.file(`appshot-${s.id}-${s.w}x${s.h}.png`,blob);
     }
     const out=await zip.generateAsync({type:"blob"});
