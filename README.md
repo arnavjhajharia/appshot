@@ -26,6 +26,10 @@ revenue SKU, sold as a Gumroad download. App-icon / favicon export folds in (see
 
 Single `index.html`, no build step. MIT licensed.
 
+## List this project
+
+One-line: **Free in-browser App Store & Google Play screenshot maker — exact required pixel sizes, device frames, no upload.** https://arnavjhajharia.github.io/appshot/ · https://github.com/arnavjhajharia/appshot
+
 ## Guide
 
 [App Store & Google Play screenshot sizes (November 2026)](https://arnavjhajharia.github.io/appshot/screenshot-sizes/): every device size, which ones are required, and a simple export recipe.
