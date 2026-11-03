@@ -1,6 +1,6 @@
 ---
 title: "App Store rejected my screenshots for wrong dimensions — what actually changed in 2026"
-tags: ios, android, webdev, indiehackers
+tags: appstore, ios, android, webdev, indiehackers
 published: false
 canonical_url: https://arnavjhajharia.github.io/appshot/screenshot-sizes/
 ---
