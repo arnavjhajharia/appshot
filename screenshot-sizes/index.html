@@ -1,0 +1,55 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>App Store &amp; Google Play screenshot sizes (November 2026)</title>
+<meta name="description" content="Every App Store and Google Play screenshot size, which ones are required, and a simple recipe: design at 1290x2796, export 1179x2556 and 2064x2752. Checked Nov 2026.">
+<link rel="canonical" href="https://arnavjhajharia.github.io/appshot/screenshot-sizes/">
+<meta property="og:title" content="App Store &amp; Google Play screenshot sizes (November 2026)"><meta property="og:description" content="Every App Store and Google Play screenshot size, which ones are required, and a simple recipe: design at 1290x2796, export 1179x2556 and 2064x2752. Checked Nov 2026.">
+<meta property="og:url" content="https://arnavjhajharia.github.io/appshot/screenshot-sizes/"><meta property="og:type" content="article">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What size are App Store screenshots in 2026?", "acceptedAnswer": {"@type": "Answer", "text": "The one required iPhone size is 1179 x 2556 (or 1206 x 2622) for iPhones with Dynamic Island. If your app runs on iPad, you also need 2064 x 2752 (or 2048 x 2732). Other sizes are optional and scaled from the next size up."}}, {"@type": "Question", "name": "Do I still need 6.5-inch or 6.7-inch screenshots?", "acceptedAnswer": {"@type": "Answer", "text": "Only if you don't supply the Dynamic Island sizes. 1284 x 2778 / 1242 x 2688 (Face ID large display) are required only when Dynamic Island large-display screenshots are missing. 1290 x 2796 is optional but a good master size to design at."}}, {"@type": "Question", "name": "What size are Google Play screenshots?", "acceptedAnswer": {"@type": "Answer", "text": "Between 320 and 3840 px per side, with the long side at most twice the short side. To be eligible for Play's recommendation placements, upload at least 4 at 1080 px or larger, for example 1080 x 1920 portrait."}}, {"@type": "Question", "name": "Can screenshots have a transparent background?", "acceptedAnswer": {"@type": "Answer", "text": "No. Both stores reject alpha channels in screenshots. Export JPEG or a PNG without transparency."}}]}</script>
+<style>
+:root{--bg:#0d0e14;--fg:#e9e9f2;--muted:#9a9ab0;--line:#262838;--acc:#8b7cff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.65 -apple-system,Segoe UI,Helvetica,Arial,sans-serif}
+main{max-width:760px;margin:0 auto;padding:40px 22px 60px}a{color:var(--acc)}
+h1{font-size:34px;line-height:1.2;margin:0 0 10px}h2{font-size:24px;margin:38px 0 10px}h3{font-size:18px;margin:24px 0 4px}
+.lead{color:var(--muted);margin:0 0 26px}table{border-collapse:collapse;width:100%;margin:12px 0;font-size:15px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}th{background:#161826}
+code,pre{font-family:Menlo,Consolas,monospace;font-size:14px;background:#161826;border-radius:6px}code{padding:1px 5px}
+pre{padding:14px;overflow:auto;border:1px solid var(--line)}.cta{display:inline-block;background:var(--acc);color:#fff;text-decoration:none;font-weight:700;padding:12px 20px;border-radius:10px;margin:8px 0}
+.box{border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:#12131c;margin:22px 0}
+footer{color:var(--muted);font-size:13px;border-top:1px solid var(--line);margin-top:48px;padding-top:16px}
+</style></head><body><main>
+<p style="margin:0 0 18px;font-size:14px"><a href="https://arnavjhajharia.github.io/appshot/">&larr; AppShot</a></p>
+<h1>App Store &amp; Google Play screenshot sizes (November 2026)</h1>
+<p class="lead">Short answer: for the App Store you need <b>one iPhone size (1179 × 2556)</b>, plus <b>2064 × 2752</b> if your app runs on iPad. Google Play wants <b>at least 4 portrait shots at 1080 × 1920 or larger</b>. Everything else is optional.</p>
+<h2>Apple App Store</h2>
+<p>Formats: JPEG or PNG, no transparency (alpha), 1 to 10 screenshots per device size. Source: App Store Connect "Screenshot specifications".</p>
+<table><tr><th>Device size</th><th>Pixels (portrait)</th><th>Status</th></tr>
+<tr><td>iPhone with Dynamic Island, medium display</td><td>1179 × 2556 or 1206 × 2622</td><td><b>Required</b> (the one required iPhone size)</td></tr>
+<tr><td>iPad 13" display</td><td>2064 × 2752 or 2048 × 2732</td><td><b>Required</b> if the app runs on iPad</td></tr>
+<tr><td>iPhone with Face ID, large display</td><td>1284 × 2778 or 1242 × 2688</td><td>Required only if you didn't supply Dynamic Island large-display shots</td></tr>
+<tr><td>iPhone with Dynamic Island, large display</td><td>1260 × 2736, 1290 × 2796, 1320 × 2868</td><td>Optional</td></tr>
+<tr><td>iPhone with Face ID, medium</td><td>1170 × 2532, 1125 × 2436, 1080 × 2340</td><td>Optional (scaled)</td></tr>
+<tr><td>iPhone with Home button</td><td>1242 × 2208 (large), 750 × 1334 (medium)</td><td>Optional (scaled)</td></tr>
+<tr><td>iPad 11" / 10.5"</td><td>1488 × 2266, 1668 × 2420, 1668 × 2388, 1640 × 2360 / 1668 × 2224</td><td>Optional (scaled)</td></tr></table>
+<p>Landscape is the same sizes with width and height swapped. Missing sizes are scaled down from the next size up.</p>
+<p><b>Coming in 2027:</b> Apple has announced that screenshots for the iPhone Duo (outer 1398 × 2034, inner 2007 × 2853) become required from April 2027 for apps built with the iOS 27.1 SDK or later.</p>
+<h2>Google Play</h2>
+<table><tr><th>Asset</th><th>Rule</th></tr>
+<tr><td>Phone screenshots</td><td>2 to 8. JPEG or 24-bit PNG, no alpha. Each side 320 to 3840 px, and the long side at most 2× the short side.</td></tr>
+<tr><td>For recommendation placements</td><td>At least 4 screenshots at 1080 px minimum: 9:16 portrait (≥ 1080 × 1920) or 16:9 landscape (≥ 1920 × 1080)</td></tr>
+<tr><td>Tablets / Chromebook</td><td>1080 to 7680 px per side, 16:9 or 9:16; at least 4 recommended</td></tr>
+<tr><td>Feature graphic</td><td>1024 × 500, JPEG or 24-bit PNG, no alpha</td></tr>
+<tr><td>App icon</td><td>512 × 512, 32-bit PNG with alpha, max 1024 KB</td></tr></table>
+<h2>The simple recipe</h2>
+<ol><li>Design once at <b>1290 × 2796</b> (iPhone large display, 9:19.5).</li>
+<li>Export that and <b>1179 × 2556</b>. It's the same aspect ratio, so one layout scales cleanly.</li>
+<li>If you support iPad, export <b>2064 × 2752</b>.</li>
+<li>For Google Play, export <b>1080 × 1920</b> (4 or more) plus the 1024 × 500 feature graphic.</li></ol>
+<h2>Captions that work</h2>
+<p>The first screenshot is read in under two seconds. Lead with the outcome, not the feature, and keep it to 3 to 7 words: "Track every habit in seconds", "Never lose a receipt again", "See every subscription at a glance".</p>
+<div class="box"><b>Do it in your browser, free:</b> <a href="https://arnavjhajharia.github.io/appshot/">AppShot</a> runs entirely on your device. Nothing is uploaded and there's no sign-up.<br><a class="cta" href="https://arnavjhajharia.github.io/appshot/">Open AppShot &rarr;</a></div>
+<h2>FAQ</h2><h3>What size are App Store screenshots in 2026?</h3><p>The one required iPhone size is 1179 x 2556 (or 1206 x 2622) for iPhones with Dynamic Island. If your app runs on iPad, you also need 2064 x 2752 (or 2048 x 2732). Other sizes are optional and scaled from the next size up.</p><h3>Do I still need 6.5-inch or 6.7-inch screenshots?</h3><p>Only if you don&#x27;t supply the Dynamic Island sizes. 1284 x 2778 / 1242 x 2688 (Face ID large display) are required only when Dynamic Island large-display screenshots are missing. 1290 x 2796 is optional but a good master size to design at.</p><h3>What size are Google Play screenshots?</h3><p>Between 320 and 3840 px per side, with the long side at most twice the short side. To be eligible for Play&#x27;s recommendation placements, upload at least 4 at 1080 px or larger, for example 1080 x 1920 portrait.</p><h3>Can screenshots have a transparent background?</h3><p>No. Both stores reject alpha channels in screenshots. Export JPEG or a PNG without transparency.</p>
+<footer>Part of The Ship Kit, free browser tools for shipping apps and sites: <a href="https://arnavjhajharia.github.io/appshot/">AppShot</a> (store screenshots) ·
+<a href="https://arnavjhajharia.github.io/favikit/">Favikit</a> (favicons) · <a href="https://arnavjhajharia.github.io/ogkit/">ogkit</a> (OG images).
+Written with the help of an AI assistant and checked against the official documentation on 3 November 2026. Platforms change their rules, so re-check before you submit.</footer>
+</main></body></html>
