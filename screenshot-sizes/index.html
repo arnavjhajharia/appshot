@@ -33,7 +33,7 @@ footer{color:var(--muted);font-size:13px;border-top:1px solid var(--line);margin
 <tr><td>Google Play</td><td>Feature graphic</td><td><b>1024 × 500</b>, no alpha — see <a href="#google-play-feature-graphic">feature graphic</a></td></tr></table>
 <h2>Before you upload to App Store Connect or Play Console</h2>
 <ul class="checklist">
-<li>Export <b>JPEG or PNG without transparency</b> — alpha channels are rejected on both stores.</li>
+<li>Export <b>JPEG or PNG without an alpha channel</b>. A PNG can look fully opaque and still carry an alpha channel; App Store Connect rejects it with "Images can't contain alpha channels or transparencies". Browsers and many design tools save PNGs as RGBA by default. Check on a Mac with <code>sips -g hasAlpha shot.png</code> (you want <code>no</code>), and fix with <code>magick shot.png -background white -alpha remove -alpha off shot.png</code> or by exporting JPEG. AppShot exports 24-bit RGB PNGs.</li>
 <li>Confirm pixel dimensions match a row in Apple’s spec (wrong size → “invalid screenshot” in Connect).</li>
 <li>Upload the <b>Dynamic Island medium</b> slot even if you also ship optional 6.5&quot; / 6.7&quot; sizes — see <a href="#6-5-inch-display">6.5&quot; display</a>.</li>
 <li>For iPad builds, include a <b>13&quot; class</b> still — see <a href="#ipad-pro-screenshot-sizes">iPad Pro sizes</a>.</li>
