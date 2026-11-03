@@ -6,6 +6,8 @@ sizes the stores require — all without uploading your image anywhere.
 
 **Live:** https://arnavjhajharia.github.io/appshot/
 
+**40-second demo video:** https://youtu.be/CsBN5snyJyw
+
 ## Why
 Indie devs need polished listing graphics at specific sizes (1290×2796, 1242×2688, 2048×2732,
 1080×1920). Tools that do this (AppScreens, Previewed, Screenshots.pro) charge $20–50/mo. AppShot
