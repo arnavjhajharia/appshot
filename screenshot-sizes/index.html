@@ -41,7 +41,7 @@ footer{color:var(--muted);font-size:13px;border-top:1px solid var(--line);margin
 <li>Preview in AppShot at exact export px before upload — <a href="https://arnavjhajharia.github.io/appshot/">free tool</a>.</li>
 </ul>
 <h2 id="guide-sections">Full spec tables (by topic)</h2>
-<p style="font-size:15px;color:var(--muted);margin:0 0 24px">Jump to: <a href="#screenshot-sizes-all-devices">all Apple sizes</a> · <a href="#6-5-inch-display">6.5&quot; / Face ID large</a> · <a href="#ipad-pro-screenshot-sizes">iPad</a> · <a href="#google-play-feature-graphic">Play feature graphic</a> · <a href="#app-preview-video-size">App Preview video</a></p>
+<p style="font-size:15px;color:var(--muted);margin:0 0 24px">Jump to: <a href="#screenshot-sizes-all-devices">all Apple sizes</a> · <a href="#6-5-inch-display">6.5&quot; / Face ID large</a> · <a href="#iphone-duo-screenshot-size">iPhone Duo (2027)</a> · <a href="#ipad-pro-screenshot-sizes">iPad</a> · <a href="#google-play-feature-graphic">Play feature graphic</a> · <a href="#app-preview-video-size">App Preview video</a></p>
 <h2 id="screenshot-sizes-all-devices">Apple App Store screenshot sizes (all devices, 2026)</h2>
 <p>Formats: JPEG or PNG, no transparency (alpha), 1 to 10 screenshots per device size. Source: App Store Connect "Screenshot specifications".</p>
 <table><tr><th>Device size</th><th>Pixels (portrait)</th><th>Status</th></tr>
@@ -51,11 +51,25 @@ footer{color:var(--muted);font-size:13px;border-top:1px solid var(--line);margin
 <tr><td>iPhone with Dynamic Island, large display</td><td>1260 × 2736, 1290 × 2796, 1320 × 2868</td><td>Optional</td></tr>
 <tr><td>iPhone with Face ID, medium</td><td>1170 × 2532, 1125 × 2436, 1080 × 2340</td><td>Optional (scaled)</td></tr>
 <tr><td>iPhone with Home button</td><td>1242 × 2208 (large), 750 × 1334 (medium)</td><td>Optional (scaled)</td></tr>
-<tr><td>iPad 11" / 10.5"</td><td>1488 × 2266, 1668 × 2420, 1668 × 2388, 1640 × 2360 / 1668 × 2224</td><td>Optional (scaled)</td></tr></table>
+<tr><td>iPad 11" / 10.5"</td><td>1488 × 2266, 1668 × 2420, 1668 × 2388, 1640 × 2360 / 1668 × 2224</td><td>Optional (scaled)</td></tr>
+<tr><td>iPhone Duo, outer / inner display</td><td>1398 × 2034 / 2007 × 2853</td><td>Required from April 2027 (iOS 27.1 SDK); <a href="#iphone-duo-screenshot-size">details</a></td></tr></table>
 <p>Landscape is the same sizes with width and height swapped. Missing sizes are scaled down from the next size up.</p>
 <h2 id="6-5-inch-display">App Store screenshot size for 6.5&quot; displays (2026)</h2>
 <p>App Store Connect does not use the marketing label &ldquo;6.5 inch&rdquo; anymore. That class is <b>iPhone with Face ID, large display</b>: upload <b>1242 × 2688</b> or <b>1284 × 2778</b> portrait <em>only if</em> you did not supply Dynamic Island large-display shots (1290 × 2796, 1320 × 2868, etc.). For most new apps the hard requirement is still <b>1179 × 2556</b> (Dynamic Island, medium). Design at 1290 × 2796 once, then export the required sizes from the same layout.</p>
-<p><b>Coming in 2027:</b> Apple has announced that screenshots for the iPhone Duo (outer 1398 × 2034, inner 2007 × 2853) become required from April 2027 for apps built with the iOS 27.1 SDK or later.</p>
+<h2 id="iphone-duo-screenshot-size">iPhone Duo screenshot size (App Store, 2027)</h2>
+<p>Apple's screenshot specifications list two new iPhone Duo display classes. Sizes are portrait, in pixels:</p>
+<table>
+<tr><th>Display</th><th>Size</th><th>When it's required</th></tr>
+<tr><td>iPhone Duo, outer display</td><td><b>1398 × 2034</b></td><td>From <b>April 2027</b>, for apps built with the iOS 27.1 SDK or later</td></tr>
+<tr><td>iPhone Duo, inner display</td><td><b>2007 × 2853</b></td><td>Same: April 2027, iOS 27.1 SDK or later</td></tr>
+</table>
+<p>Until then the Duo slots are optional, and your usual required iPhone size (1179 × 2556) still has to be there.</p>
+<p><b>Why you can't just resize your iPhone screenshots:</b> both Duo screens are much wider than an iPhone. The inner display is about 0.70 wide-to-tall and the outer about 0.69, against roughly 0.46 for a 1290 × 2796 iPhone shot. Stretched to fit, your UI looks distorted. Scaled to fit, it gets wide empty bars. Two honest options:</p>
+<ul>
+<li>Capture the real layout on the device itself, or in Xcode's Simulator if your Xcode version includes an iPhone Duo device. This matters most for the inner display, where a well-made app shows a wider layout.</li>
+<li>Place your existing screenshot on a designed background at the exact Duo size, with a caption. <a href="../">AppShot</a> has both Duo sizes in its size list (free, runs in the browser).</li>
+</ul>
+<p style="font-size:14px;opacity:.75">Source: Apple Developer, <a href="https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications/" rel="nofollow">Screenshot specifications</a>, checked 3 November 2026.</p>
 <h2 id="ipad-pro-screenshot-sizes">iPad Pro / 13&quot; App Store screenshot sizes</h2>
 <p>If the binary runs on iPad, App Store Connect requires a <b>13&quot; display</b> class screenshot: <b>2064 × 2752</b> or <b>2048 × 2732</b> portrait (landscape = swapped). Older “iPad Pro” threads that only mention 2048 × 2732 are still valid as one of the accepted pairs. 11&quot; / 10.5&quot; sizes are optional — Connect scales from the next size up when they are missing. Export iPad from the same master layout you use for iPhone (letterbox or reflow; don’t stretch).</p>
 <h2 id="google-play-screenshots">Google Play</h2>
