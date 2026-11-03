@@ -102,7 +102,8 @@
           <option value="'Courier New',monospace">Mono</option>
         </select>
         <select id="capWeight" style="flex:1">
-          <option value="800">Bold</option>
+          <option value="800">Extra bold</option>
+          <option value="700">Bold</option>
           <option value="600">Semibold</option>
           <option value="400">Regular</option>
         </select>
@@ -465,7 +466,7 @@
     if(!o||typeof o!=="object") return;
     if(o.sizeId && SIZES.some(s=>s.id===o.sizeId)){state.sizeId=o.sizeId; sizeSel.value=o.sizeId; syncSizeHint();}
     if(o.frame && FRAMES.some(f=>f.id===o.frame)){state.frame=o.frame;[...frameSeg.children].forEach(x=>x.classList.toggle("on",x.dataset.id===o.frame));}
-    PRESET_INPUTS.forEach(id=>{ if(o[id]!==undefined && $("#"+id)) $("#"+id).value=o[id]; });
+    PRESET_INPUTS.forEach(id=>{ const el=$("#"+id); if(o[id]===undefined||!el) return; const prev=el.value; el.value=o[id]; if(el.tagName==="SELECT"&&el.value==="") el.value=prev; });
     if(o.devShadow!==undefined) $("#devShadow").checked=!!o.devShadow;
     [...gradPick.children].forEach(x=>x.classList.remove("on")); // custom colors from preset win
     draw();
