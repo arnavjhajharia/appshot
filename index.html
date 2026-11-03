@@ -270,7 +270,21 @@
     const capMode=$("#capPos").value;
     const capText=$("#capText").value.trim();
     const hasCap = capMode!=="none" && capText.length>0;
-    const capBandH = hasCap ? H*0.16 : H*0.05;
+    // measure the caption first so long (multi-line) captions grow the band instead of clipping off the top edge
+    let capFs=0, capLines=[], capLineH=0;
+    if(hasCap){
+      ctx.save();
+      capFs = H*(+$("#capSize").value)/100;
+      ctx.font=`${$("#capWeight").value} ${capFs}px ${$("#capFont").value}`;
+      capLines=wrapText(ctx,capText,W-pad*2);
+      capLineH=capFs*1.15;
+      while((capLines.length>4 || capLines.length*capLineH > H*0.33) && capFs > H*0.015){ // auto-shrink very long/large captions to fit
+        capFs*=0.9; ctx.font=`${$("#capWeight").value} ${capFs}px ${$("#capFont").value}`;
+        capLines=wrapText(ctx,capText,W-pad*2); capLineH=capFs*1.15;
+      }
+      ctx.restore();
+    }
+    const capBandH = hasCap ? Math.min(H*0.4, Math.max(H*0.16, capLines.length*capLineH + H*0.07)) : H*0.05;
 
     // compute device region (vertical band left for device)
     let topBand = (hasCap && capMode==="top") ? capBandH : H*0.05;
@@ -283,10 +297,8 @@
       ctx.save();
       ctx.fillStyle=$("#capColor").value;
       ctx.textAlign="center"; ctx.textBaseline="middle";
-      const fs = H*(+$("#capSize").value)/100;
-      ctx.font=`${$("#capWeight").value} ${fs}px ${$("#capFont").value}`;
-      const lines=wrapText(ctx,capText,W-pad*2);
-      const lineH=fs*1.15;
+      ctx.font=`${$("#capWeight").value} ${capFs}px ${$("#capFont").value}`;
+      const lines=capLines, lineH=capLineH;
       const blockH=lines.length*lineH;
       let by = capMode==="top" ? (topBand/2) : (H - botBand/2);
       let startY = by - blockH/2 + lineH/2;
@@ -387,7 +399,7 @@
     const words=text.split(/\s+/); const lines=[]; let cur="";
     words.forEach(w=>{const t=cur?cur+" "+w:w; if(ctx.measureText(t).width>maxW && cur){lines.push(cur);cur=w;}else cur=t;});
     if(cur)lines.push(cur);
-    return lines.slice(0,4);
+    return lines;
   }
 
   const preview=$("#preview"), pctx=preview.getContext("2d");
