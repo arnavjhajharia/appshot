@@ -1,9 +1,9 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>App Store &amp; Google Play screenshot sizes (November 2026)</title>
-<meta name="description" content="App Store screenshot sizes for 6.5 inch, 6.7 inch, and iPad — which pixels are required in 2026, plus Google Play rules. Design at 1290x2796, export 1179x2556 and 2064x2752.">
+<title>App Store screenshot sizes in 2026 — Google Play pixels &amp; upload checklist</title>
+<meta name="description" content="App Store screenshot sizes in 2026: required iPhone 1179×2556, iPad 2064×2752, Google Play 1080×1920 and 1024×500 feature graphic. Upload checklist before Connect or Play Console.">
 <link rel="canonical" href="https://arnavjhajharia.github.io/appshot/screenshot-sizes/">
-<meta property="og:title" content="App Store &amp; Google Play screenshot sizes (November 2026)"><meta property="og:description" content="Every App Store and Google Play screenshot size, which ones are required, and a simple recipe: design at 1290x2796, export 1179x2556 and 2064x2752. Checked Nov 2026.">
+<meta property="og:title" content="App Store screenshot sizes in 2026 — Google Play pixels &amp; upload checklist"><meta property="og:description" content="Required App Store and Google Play screenshot pixels for 2026, plus a checklist before you upload to Connect or Play Console.">
 <meta property="og:url" content="https://arnavjhajharia.github.io/appshot/screenshot-sizes/"><meta property="og:type" content="article">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What size are App Store screenshots in 2026?", "acceptedAnswer": {"@type": "Answer", "text": "The one required iPhone size is 1179 x 2556 (or 1206 x 2622) for iPhones with Dynamic Island. If your app runs on iPad, you also need 2064 x 2752 (or 2048 x 2732). Other sizes are optional and scaled from the next size up."}}, {"@type": "Question", "name": "Do I still need 6.5-inch or 6.7-inch screenshots?", "acceptedAnswer": {"@type": "Answer", "text": "Only if you don't supply the Dynamic Island sizes. 1284 x 2778 / 1242 x 2688 (Face ID large display) are required only when Dynamic Island large-display screenshots are missing. 1290 x 2796 is optional but a good master size to design at."}}, {"@type": "Question", "name": "What size are Google Play screenshots?", "acceptedAnswer": {"@type": "Answer", "text": "Between 320 and 3840 px per side, with the long side at most twice the short side. To be eligible for Play's recommendation placements, upload at least 4 at 1080 px or larger, for example 1080 x 1920 portrait."}}, {"@type": "Question", "name": "Can screenshots have a transparent background?", "acceptedAnswer": {"@type": "Answer", "text": "No. Both stores reject alpha channels in screenshots. Export JPEG or a PNG without transparency."}}, {"@type": "Question", "name": "What are iPad Pro screenshot sizes for App Store review?", "acceptedAnswer": {"@type": "Answer", "text": "For iPad apps, App Store Connect expects a 13-inch class shot: 2064 x 2752 or 2048 x 2732 portrait (swap for landscape). Smaller iPad sizes are optional and scaled from the next size up."}}, {"@type": "Question", "name": "What size is the Google Play feature graphic?", "acceptedAnswer": {"@type": "Answer", "text": "1024 x 500 pixels, JPEG or 24-bit PNG with no alpha. It appears at the top of your Play Store listing."}}, {"@type": "Question", "name": "What size should an App Store App Preview video be?", "acceptedAnswer": {"@type": "Answer", "text": "For modern iPhones, common accepted portrait sizes are 886 x 1920 or 1080 x 1920 (landscape swapped). Keep the clip under about 30 seconds in H.264. Stills are still required separately."}}]}</script>
 <style>
@@ -18,11 +18,30 @@ pre{padding:14px;overflow:auto;border:1px solid var(--line)}.cta{display:inline-
 .box{border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:#12131c;margin:22px 0}
 footer{color:var(--muted);font-size:13px;border-top:1px solid var(--line);margin-top:48px;padding-top:16px}
 .verified{font-size:14px;color:var(--muted);margin:0 0 22px;padding:10px 14px;border-left:3px solid var(--acc);background:#12131c}
+.checklist{list-style:none;padding:0;margin:16px 0}.checklist li{margin:10px 0;padding-left:28px;position:relative}
+.checklist li::before{content:"☐";position:absolute;left:0;color:var(--acc);font-weight:700}
 </style></head><body><main>
 <p style="margin:0 0 18px;font-size:14px"><a href="https://arnavjhajharia.github.io/appshot/">&larr; AppShot</a></p>
-<h1>App Store &amp; Google Play screenshot sizes (November 2026)</h1>
+<h1>App Store screenshot sizes in 2026</h1>
 <p class="lead">Short answer: for the App Store you need <b>one iPhone size (1179 × 2556)</b>, plus <b>2064 × 2752</b> if your app runs on iPad. Google Play wants <b>at least 4 portrait shots at 1080 × 1920 or larger</b>. Everything else is optional.</p>
 <p class="verified"><time datetime="2026-11-03">Last verified 3 November 2026</time> against <a href="https://developer.apple.com/help/app-store-connect/reference/screenshot-specifications">App Store Connect screenshot specs</a> and <a href="https://support.google.com/googleplay/android-developer/answer/9866151">Google Play graphic assets</a>. Narrative version on <a href="https://dev.to/bharat_ankh_920bf0864220a/app-store-screenshot-sizes-in-2026-which-ones-are-actually-required-24f5">DEV Community</a>.</p>
+<h2>Minimum uploads (quick reference)</h2>
+<table><tr><th>Store</th><th>Asset</th><th>Pixels (portrait)</th></tr>
+<tr><td>App Store</td><td>iPhone (Dynamic Island, medium)</td><td><b>1179 × 2556</b> or 1206 × 2622</td></tr>
+<tr><td>App Store</td><td>iPad 13&quot; (if iPad binary)</td><td><b>2064 × 2752</b> or 2048 × 2732</td></tr>
+<tr><td>Google Play</td><td>Phone screenshots (×4+)</td><td>≥ <b>1080 × 1920</b> each, no alpha</td></tr>
+<tr><td>Google Play</td><td>Feature graphic</td><td><b>1024 × 500</b>, no alpha — see <a href="#google-play-feature-graphic">feature graphic</a></td></tr></table>
+<h2>Before you upload to App Store Connect or Play Console</h2>
+<ul class="checklist">
+<li>Export <b>JPEG or PNG without transparency</b> — alpha channels are rejected on both stores.</li>
+<li>Confirm pixel dimensions match a row in Apple’s spec (wrong size → “invalid screenshot” in Connect).</li>
+<li>Upload the <b>Dynamic Island medium</b> slot even if you also ship optional 6.5&quot; / 6.7&quot; sizes — see <a href="#6-5-inch-display">6.5&quot; display</a>.</li>
+<li>For iPad builds, include a <b>13&quot; class</b> still — see <a href="#ipad-pro-screenshot-sizes">iPad Pro sizes</a>.</li>
+<li>Play Console: upload at least <b>four</b> phone shots ≥1080 px wide plus the <b>1024×500</b> feature graphic.</li>
+<li>Preview in AppShot at exact export px before upload — <a href="https://arnavjhajharia.github.io/appshot/">free tool</a>.</li>
+</ul>
+<h2 id="guide-sections">Full spec tables (by topic)</h2>
+<p style="font-size:15px;color:var(--muted);margin:0 0 24px">Jump to: <a href="#screenshot-sizes-all-devices">all Apple sizes</a> · <a href="#6-5-inch-display">6.5&quot; / Face ID large</a> · <a href="#ipad-pro-screenshot-sizes">iPad</a> · <a href="#google-play-feature-graphic">Play feature graphic</a> · <a href="#app-preview-video-size">App Preview video</a></p>
 <h2 id="screenshot-sizes-all-devices">Apple App Store screenshot sizes (all devices, 2026)</h2>
 <p>Formats: JPEG or PNG, no transparency (alpha), 1 to 10 screenshots per device size. Source: App Store Connect "Screenshot specifications".</p>
 <table><tr><th>Device size</th><th>Pixels (portrait)</th><th>Status</th></tr>
