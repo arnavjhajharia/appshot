@@ -20,7 +20,7 @@ Apple and Google both reject uploads that are the wrong pixel size or have an al
 - Between 320 and 3840 px per side; long side ≤ 2× short side.
 - For featuring: at least **4** screenshots, **1080 px** or wider (e.g. 1080 × 1920 portrait).
 
-Full table with sources: [App Store & Play screenshot sizes (Nov 2026)](https://arnavjhajharia.github.io/appshot/screenshot-sizes/).
+Full table with sources: [App Store & Play screenshot sizes (Nov 2026)](https://arnavjhajharia.github.io/appshot/screenshot-sizes/#6-5-inch-display).
 
 ## The mistakes I keep seeing
 
