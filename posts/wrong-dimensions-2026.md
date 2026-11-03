@@ -34,4 +34,6 @@ I built [AppShot](https://arnavjhajharia.github.io/appshot/) to drop a raw captu
 
 If this saved you a rejection loop, the size cheat sheet is the page I re-check before every submit: [screenshot-sizes guide](https://arnavjhajharia.github.io/appshot/screenshot-sizes/).
 
+**Pro layouts:** if you want store-ready caption formulas + 30 layout presets (not just frames), [AppShot Pro ($12 on Gumroad)](https://bharatankh.gumroad.com/l/appshot-pro) imports into the free tool — still nothing uploaded.
+
 _Disclosure: built with AI coding agents under my direction; MIT repo [on GitHub](https://github.com/arnavjhajharia/appshot)._
